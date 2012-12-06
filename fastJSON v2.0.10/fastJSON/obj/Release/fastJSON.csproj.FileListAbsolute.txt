@@ -1,0 +1,4 @@
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\bin\Release\fastJSON.dll
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\bin\Release\fastJSON.pdb
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\obj\Release\fastJSON.dll
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\obj\Release\fastJSON.pdb

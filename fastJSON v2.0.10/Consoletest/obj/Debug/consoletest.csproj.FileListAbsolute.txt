@@ -1,0 +1,7 @@
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\bin\Debug\consoletest.exe
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\bin\Debug\consoletest.pdb
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\bin\Debug\fastJSON.dll
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\bin\Debug\fastJSON.pdb
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\obj\Debug\consoletest.csprojResolveAssemblyReference.cache
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\obj\Debug\consoletest.exe
+C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\consoletest\obj\Debug\consoletest.pdb
