@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+# SharpDevelop 4.0.0.5949
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "htmlDemo", "htmlDemo\htmlDemo.vbproj", "{E0DDA24E-63D9-433E-9C91-E942D3C13C2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E92BFB8E-A1B5-4B6A-A6DF-7AACA650B78D}.Debug|x86.ActiveCfg = Debug|x86
+		{E92BFB8E-A1B5-4B6A-A6DF-7AACA650B78D}.Debug|x86.Build.0 = Debug|x86
+		{E92BFB8E-A1B5-4B6A-A6DF-7AACA650B78D}.Release|x86.ActiveCfg = Release|x86
+		{E92BFB8E-A1B5-4B6A-A6DF-7AACA650B78D}.Release|x86.Build.0 = Release|x86
+		{E0DDA24E-63D9-433E-9C91-E942D3C13C2B}.Debug|x86.Build.0 = Debug|x86
+		{E0DDA24E-63D9-433E-9C91-E942D3C13C2B}.Debug|x86.ActiveCfg = Debug|x86
+		{E0DDA24E-63D9-433E-9C91-E942D3C13C2B}.Release|x86.Build.0 = Release|x86
+		{E0DDA24E-63D9-433E-9C91-E942D3C13C2B}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

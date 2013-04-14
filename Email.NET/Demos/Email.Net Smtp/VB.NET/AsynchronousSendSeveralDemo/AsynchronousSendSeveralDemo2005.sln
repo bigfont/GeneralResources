@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+# SharpDevelop 4.0.0.5949
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AsynchronousDemo", "AsynchronousDemo\AsynchronousDemo2005.vbproj", "{4E0FEF07-76A0-40E5-BBF1-62890E4F3FDF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB0EDF42-454A-4F30-89D7-984EBCF053B4}.Debug|x86.ActiveCfg = Debug|x86
+		{FB0EDF42-454A-4F30-89D7-984EBCF053B4}.Debug|x86.Build.0 = Debug|x86
+		{FB0EDF42-454A-4F30-89D7-984EBCF053B4}.Release|x86.ActiveCfg = Release|x86
+		{FB0EDF42-454A-4F30-89D7-984EBCF053B4}.Release|x86.Build.0 = Release|x86
+		{4E0FEF07-76A0-40E5-BBF1-62890E4F3FDF}.Debug|x86.Build.0 = Debug|x86
+		{4E0FEF07-76A0-40E5-BBF1-62890E4F3FDF}.Debug|x86.ActiveCfg = Debug|x86
+		{4E0FEF07-76A0-40E5-BBF1-62890E4F3FDF}.Release|x86.Build.0 = Release|x86
+		{4E0FEF07-76A0-40E5-BBF1-62890E4F3FDF}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

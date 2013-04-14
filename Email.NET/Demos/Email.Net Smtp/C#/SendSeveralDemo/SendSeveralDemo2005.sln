@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+# SharpDevelop 4.0.0.5949
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendSeveralDemo", "SendSeveralDemo\SendSeveralDemo2005.csproj", "{F8557BE1-BAE4-4A52-874F-A8AF2229B0FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8557BE1-BAE4-4A52-874F-A8AF2229B0FE}.Debug|x86.ActiveCfg = Debug|x86
+		{F8557BE1-BAE4-4A52-874F-A8AF2229B0FE}.Debug|x86.Build.0 = Debug|x86
+		{F8557BE1-BAE4-4A52-874F-A8AF2229B0FE}.Release|x86.ActiveCfg = Release|x86
+		{F8557BE1-BAE4-4A52-874F-A8AF2229B0FE}.Release|x86.Build.0 = Release|x86
+		{4C0C5888-AFAB-4E1E-89A1-722605953959}.Debug|x86.Build.0 = Debug|x86
+		{4C0C5888-AFAB-4E1E-89A1-722605953959}.Debug|x86.ActiveCfg = Debug|x86
+		{4C0C5888-AFAB-4E1E-89A1-722605953959}.Release|x86.Build.0 = Release|x86
+		{4C0C5888-AFAB-4E1E-89A1-722605953959}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
