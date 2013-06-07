@@ -1,0 +1,15 @@
+1. Open the image in commons.wikimedia.org
+
+2. Click the <Use this file> on the web link. 
+
+3. Copy the contents of the attribution field. EG:
+
+By Brian Stansberry (Own work) [CC-BY-3.0 (http://creativecommons.org/licenses/by/3.0)], via Wikimedia Commons
+
+4. Turn this into a minimal attribution. EG:
+
+Brian Stansberry / <a href="http://creativecommons.org/licenses/by-sa/3.0/" >CC-BY-3.0</a>
+
+References
+
+http://commons.wikimedia.org/wiki/Commons:Credit_line

@@ -1,5 +1,0 @@
------------------------
-Compile JS
------------------------
-
-jsmin <bigfont.js> bigfont.min.js

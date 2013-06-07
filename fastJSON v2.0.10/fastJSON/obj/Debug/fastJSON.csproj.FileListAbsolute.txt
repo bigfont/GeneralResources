@@ -1,5 +1,0 @@
-C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\bin\Debug\fastJSON.dll
-C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\bin\Debug\fastJSON.pdb
-C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\obj\Debug\fastJSON.dll
-C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\obj\Debug\fastJSON.pdb
-C:\Users\Shaun\Documents\GitHub\GeneralResources\fastJSON v2.0.10\fastJSON\obj\Debug\fastJSON.csprojResolveAssemblyReference.cache
