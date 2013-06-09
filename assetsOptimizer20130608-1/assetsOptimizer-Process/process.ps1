@@ -5,17 +5,17 @@
 ####################################
 
 <#
-Optional. If set allows you to specify the javascript files to minify.
+Specify the javascript files to minify.
 eg @('bootstrap', 'bigfont')
 #>
 $arrTargetJavascriptFiles = @();
 <#
-Optional. If set allows you to specify the less files to compile.
+Specify the less files to compile.
 eg @('bigfont', 'responsive', 'bigfont')
 #>
 $arrTargetLessFiles = @();
 <#
-True if you want to optimize images, which takes some time.
+Set to true if you want to optimize images, which takes some time.
 #>
 $doOptimizeImages = $false;
 
