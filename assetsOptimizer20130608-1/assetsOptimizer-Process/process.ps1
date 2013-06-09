@@ -57,7 +57,7 @@ $fileOpt = Get-ChildItem -recurse |
 
 
 ####################################
-#process less
+#process lesscss
 ####################################
 Write-Host("`n");
 Write-Host('processing lesscss')
@@ -119,6 +119,11 @@ foreach ($file in $jsFiles)
 
 
 
+
+
+
+
+
 ####################################
 #resize images
 ####################################
@@ -165,6 +170,7 @@ foreach ($file in $imgFiles)
     #determine where to stuff the suffix
     $suffixStuffIndex = $file.Name.LastIndexOf('.');
 
+    #function to adhere to DRY principles
     Function ResizeAndRenameImage($newWidth, $newSuffix)
     {
         $newHeight = $aspectRatio * $newWidth;           
@@ -174,6 +180,7 @@ foreach ($file in $imgFiles)
         if(Test-Path $savePath)
         {
             #file exists so delete it before save.
+            #odd that we cannot over write an existing file.
             Remove-Item $savePath;
         }
         
@@ -182,12 +189,18 @@ foreach ($file in $imgFiles)
         Write-Host($savePath);
     }
 
+    #call the function above for all the sizes.
     ResizeAndRenameImage $largeWidth $largeSuffix
     ResizeAndRenameImage $desktopWidth $desktopSuffix
     ResizeAndRenameImage $portraitTabletWidth $portraitTabletSuffix
     ResizeAndRenameImage $phoneToTabletWidth $phoneToTabletSuffix
     ResizeAndRenameImage $phoneWidth $phoneSuffix
 }
+
+
+
+
+
 
 
 
@@ -209,6 +222,10 @@ else
 {
     Write-Host('please opt in to image optimization');
 }
+
+
+
+
 
 
 
