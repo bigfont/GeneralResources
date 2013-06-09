@@ -23,23 +23,21 @@ $doOptimizeImages = $false;
 
 
 
+
+
+
+
+
 ####################################
-#retrieve modules and executables
-#then navigate to the assets-N folder
+#retrieve paths, modules, and executables
 ####################################
 
-#retrieve relevant directories
+#retrieve relevant paths and directories
 $scriptPath = $MyInvocation.MyCommand.Path;
 $scriptDir = Split-Path $scriptPath;
 $scriptParentDir = Split-Path -parent $scriptDir; 
 $assetsDir = Get-ChildItem $scriptParentDir -Directory | Where-Object { $_.Name -match 'assets-\d*$' }
 $siteAssetsDir = Get-ChildItem $assetsDir.FullName -Directory | Where-Object { $_.Name -match 'site$' }
-
-Write-Host('Paths');
-Write-Host($scriptDir);
-Write-Host($scriptParentDir);
-Write-Host($assetsDir);
-Write-Host($siteAssetsDir);
 
 #import modules
 Import-Module (".\modules\minJS\minJS");
@@ -48,6 +46,10 @@ Import-Module (".\modules\image\Image.psm1");
 #import executable
 $fileOpt = Get-ChildItem -recurse | 
     Where-Object { $_.Name -match 'FileOptimizer64.exe'}
+
+
+
+
 
 
 
@@ -71,7 +73,7 @@ if($lessFiles.Count -eq 0)
 
 foreach ($file in $lessFiles)
 {          
-    #create the css directory if it doesn't exist
+    #create the css save directory if it doesn't exist
     $saveDirectory = $file.DirectoryName -replace 'less$', 'css';
     if(!(Test-Path $saveDirectory))
     {
@@ -79,9 +81,15 @@ foreach ($file in $lessFiles)
     }
     
     $savePath = $saveDirectory + '\' + $file.BaseName + '.min.css';    
-    lessc -x $file.FullName > $savePath; #this runs lessc filename.less > filename.min.css  
+    lessc -x $file.FullName > $savePath; #this runs lessc -x filename.less > filename.min.css  
     Write-Host($savePath);
 }
+
+
+
+
+
+
 
 
 ####################################
