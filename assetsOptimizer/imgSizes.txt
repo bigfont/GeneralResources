@@ -1,0 +1,35 @@
+FireFox's Responsive Design View has these options.
+phones    320x480     
+          360x640     
+tablets   768x1024
+          800x1280
+desktops  980x1280
+large     1280x600
+          1920x900
+
+Basically there are ten widths (because desktops don't rotate, in general):
+320
+360
+480
+640
+768
+800 
+980
+1024
+1280
+1920
+
+As of June 2013 Bootstrap supports these devices (see scaffolding.html#responsive):
+Large display         1200px and up
+Default               980px
+Portrait tablets 	  768px and above
+Phones to tablets 	  767px and below
+Phones 	              480px and below          
+
+For now, we have decided to serve these img widths
+
+Large Display         1200px
+Default               980px 
+Portrait tablets      768px
+Phones to tablets     480px
+Phones                320px

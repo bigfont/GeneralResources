@@ -1,24 +1,31 @@
-<#
-LESS files are compiled, renamed to .css, and placed into a sibling css directory.
-JAVASCRIPT files are minified, renamed to .min.js, and placed into the same directory.
-#>
+##################
+#setup 
+##################
 
-#Change to the scripts directory
+Clear-Host
+
+$arrTargetJavascriptFiles = @();
+$arrTargetLessFiles = @();
+$doOptimizeImages = $false;
+
+#Change to the current script's directory
 $scriptpath = $MyInvocation.MyCommand.Path;
 $dir = Split-Path $scriptpath;
 cd $dir;
 
-#import dependencies
-Import-Module (".\minJS");
+#import modules
+Import-Module (".\modules\minJS\minJS");
+Import-Module (".\modules\image\Image.psm1");
 
-#Get FileOptimizer64.exe full path
-#We think that this includes metadata stripping
-$fileOpt = Get-ChildItem -recurse | Where-Object { $_.Name -match 'FileOptimizer64.exe'}
+#import executable
+$fileOpt = Get-ChildItem -recurse | 
+    Where-Object { $_.Name -match 'FileOptimizer64.exe'}
 
-#store and change to the assets folder
+#change to the assets directory
 cd ..
-$Assetsfolder = Get-ChildItem -Directory | Where-Object { $_.Name -match 'assets' }
-cd $Assetsfolder;
+$assetsFolder = Get-ChildItem -Directory | 
+    Where-Object { $_.Name -match 'assets-\d' }
+cd $assetsFolder;
 
 <#
 TODO
@@ -26,38 +33,126 @@ Create the css directory if it doesn't exist.
 In the meantime, just create it manually.
 #>
 
-@'
+
+
+
+
+##################
+#process less
+##################
+Write-Host(@'
 ------------------
 process lesscss
 ------------------
-'@
-$files_less = Get-ChildItem -recurse -include *.less | Where-Object { 'bootstrap', 'responsive', 'bigfont' -contains $_.BaseName }
-foreach ($file in $files_less)
+'@)
+$lessFiles = Get-ChildItem -recurse -include *.less | 
+    Where-Object { $arrTargetLessFiles.Count -eq 0 -or $arrTargetLessFiles -contains $_.BaseName }
+foreach ($file in $lessFiles)
 {       
-    $savePath = $file.FullName -replace "less", "css"
-    lessc $file.FullName > $savePath;
-    #print results
-    '-' + $savePath;
+    $savePath = $file.FullName -replace "less", "css";    
+    lessc $file.FullName > $savePath; #run lesscss   
+    Write-Host($savePath);
 }
 
-@'
+
+
+
+
+##################
+#process js
+##################
+Write-Host(@'
 ------------------
 process js
 ------------------
-'@
-$files_js = Get-ChildItem -recurse -include *.js -Exclude *.min.js | Where-Object { 'bigfont' -contains $_.BaseName }
-foreach ($file in $files_js)
+'@)
+$jsFiles = Get-ChildItem -recurse -include *.js -exclude *.min.js | 
+    Where-Object { $arrTargetJavascriptFiles.Count -eq 0 -or $arrTargetJavascriptFiles -contains $_.BaseName }
+foreach ($file in $jsFiles)
 {           
     $str = Get-Content -Path $file.FullName;
     $min = (minify -inputData $str -inputDataType "js");    
     $savePath = ($file.FullName -replace "`\.js", '.min.js');    
-    $min | Out-File $savePath;
-    #print results
-    '-' + $savePath;
+    $min | Out-File $savePath;    
+    Write-Host($savePath);
 }
 
-#Run FileOptimizer
-& $fileOpt.FullName $Assetsfolder.FullName
 
+
+
+
+##################
+#resize images
+##################
+Write-Host(@'
+------------------
+resize images
+------------------
+'@)
+$imgFiles = Get-ChildItem -recurse -include *.png, *jpeg, *jpg | 
+    Where-Object { $_.BaseName -notlike "*-resize*" }
+
+foreach ($file in $imgFiles)
+{    
+    $img = $file | Get-image
+
+    #TODO save the original file in a folder called 'originals'
+
+    $fullName = $img.FullName;
+    $suffixIndex = $fullName.LastIndexOf('.');
+    $aspectRatio = $img.Height / $img.Width;
+    $newHeight = 0;
+
+    $largeWidth = 1200;
+    $desktopWidth = 980;
+    $portraitTabletWidth = 768;
+    $phoneToTabletWidth = 480;
+    $phoneWidth = 320;
+
+    Function ResizeAndRenameImage($newWidth, $newSuffix)
+    {
+        $newHeight = $aspectRatio * $newWidth;           
+        $savePath = $fullName.Insert($suffixIndex,$newSuffix);
+        $img.Resize($newWidth, $newHeight);
+        #TODO over-write the file if it exists
+        $img.SaveFile($savePath); 
+    }
+
+    ResizeAndRenameImage $largeWidth '-resizeLarge'
+    ResizeAndRenameImage $desktopWidth '-resizeDesktop'
+    ResizeAndRenameImage $portraitTabletWidth '-resizePortraitTablet'
+    ResizeAndRenameImage $phoneToTabletWidth '-resizePhoneToTablet'
+    ResizeAndRenameImage $phoneWidth '-resizePhone'
+    
+}
+
+
+##################
+#optimize images
+##################
+Write-Host(@'
+------------------
+optimize images
+------------------
+'@)
+if($doOptimizeImages) {
+    & $fileOpt.FullName $assetsFolder.FullName
+} else {
+    Write-Host('User opted out of image optimization');
+}
+
+
+
+
+
+
+##################
 #prevent exiting
-[Console]::ReadLine();
+##################
+Write-Host(@'
+------------------
+Press any key to exit.
+------------------
+'@)
+Read-Host
+Exit
