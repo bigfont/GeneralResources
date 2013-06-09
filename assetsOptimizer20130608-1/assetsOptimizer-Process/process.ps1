@@ -5,12 +5,12 @@
 ####################################
 
 <#
-Specify the javascript files to minify.
+Specify the BaseNames of javascript files to minify.
 eg @('bootstrap', 'bigfont')
 #>
 $arrTargetJavascriptFiles = @();
 <#
-Specify the less files to compile.
+Specify the BaseNames of less files to compile.
 eg @('bigfont', 'responsive', 'bigfont')
 #>
 $arrTargetLessFiles = @();
