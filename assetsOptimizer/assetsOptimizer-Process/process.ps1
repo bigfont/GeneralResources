@@ -17,7 +17,7 @@ $arrTargetLessFiles = @();
 <#
 True if you want to optimize images, which takes some time.
 #>
-$doOptimizeImages = $true;
+$doOptimizeImages = $false;
 
 
 
@@ -32,8 +32,14 @@ $doOptimizeImages = $true;
 $scriptPath = $MyInvocation.MyCommand.Path;
 $scriptDir = Split-Path $scriptPath;
 $scriptParentDir = Split-Path -parent $scriptDir; 
-$assetsDir = Get-ChildItem $scriptParentDir -Directory | Where-Object { $_.Name -match 'assets-\d$' }
+$assetsDir = Get-ChildItem $scriptParentDir -Directory | Where-Object { $_.Name -match 'assets-\d*$' }
 $siteAssetsDir = Get-ChildItem $assetsDir.FullName -Directory | Where-Object { $_.Name -match 'site$' }
+
+Write-Host('Paths');
+Write-Host($scriptDir);
+Write-Host($scriptParentDir);
+Write-Host($assetsDir);
+Write-Host($siteAssetsDir);
 
 #import modules
 Import-Module (".\modules\minJS\minJS");
