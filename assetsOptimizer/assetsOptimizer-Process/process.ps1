@@ -1,17 +1,39 @@
-##################
-#setup 
-##################
 
-Clear-Host
 
+####################################
+#setup user preferences
+####################################
+
+<#
+Optional. If set allows you to specify the javascript files to minify.
+eg @('bootstrap', 'bigfont')
+#>
 $arrTargetJavascriptFiles = @();
+<#
+Optional. If set allows you to specify the less files to compile.
+eg @('bigfont', 'responsive', 'bigfont')
+#>
 $arrTargetLessFiles = @();
-$doOptimizeImages = $false;
+<#
+True if you want to optimize images, which takes some time.
+#>
+$doOptimizeImages = $true;
 
-#Change to the current script's directory
-$scriptpath = $MyInvocation.MyCommand.Path;
-$dir = Split-Path $scriptpath;
-cd $dir;
+
+
+
+
+####################################
+#retrieve modules and executables
+#then navigate to the assets-N folder
+####################################
+
+#retrieve relevant directories
+$scriptPath = $MyInvocation.MyCommand.Path;
+$scriptDir = Split-Path $scriptPath;
+$scriptParentDir = Split-Path -parent $scriptDir; 
+$assetsDir = Get-ChildItem $scriptParentDir -Directory | Where-Object { $_.Name -match 'assets-\d$' }
+$siteAssetsDir = Get-ChildItem $assetsDir.FullName -Directory | Where-Object { $_.Name -match 'site$' }
 
 #import modules
 Import-Module (".\modules\minJS\minJS");
@@ -21,53 +43,55 @@ Import-Module (".\modules\image\Image.psm1");
 $fileOpt = Get-ChildItem -recurse | 
     Where-Object { $_.Name -match 'FileOptimizer64.exe'}
 
-#change to the assets directory
-cd ..
-$assetsFolder = Get-ChildItem -Directory | 
-    Where-Object { $_.Name -match 'assets-\d' }
-cd $assetsFolder;
-
-<#
-TODO
-Create the css directory if it doesn't exist.
-In the meantime, just create it manually.
-#>
 
 
 
 
 
-##################
+####################################
 #process less
-##################
-Write-Host(@'
-------------------
-process lesscss
-------------------
-'@)
-$lessFiles = Get-ChildItem -recurse -include *.less | 
-    Where-Object { $arrTargetLessFiles.Count -eq 0 -or $arrTargetLessFiles -contains $_.BaseName }
+####################################
+Write-Host("`n");
+Write-Host('processing lesscss')
+
+#get all the less files in the assets directory
+$lessFiles = Get-ChildItem $assetsDir.FullName -recurse -include *.less | 
+    Where-Object { $arrTargetLessFiles -contains $_.BaseName }
+
+if($lessFiles.Count -eq 0)
+{
+    Write-Host('please specify .less files to compile.');
+}
+
 foreach ($file in $lessFiles)
-{       
-    $savePath = $file.FullName -replace "less", "css";    
-    lessc $file.FullName > $savePath; #run lesscss   
+{          
+    #create the css directory if it doesn't exist
+    $saveDirectory = $file.DirectoryName -replace 'less$', 'css';
+    if(!(Test-Path $saveDirectory))
+    {
+        New-Item -ItemType directory -Path $saveDirectory
+    }
+    
+    $savePath = $saveDirectory + '\' + $file.BaseName + '.min.css';    
+    lessc -x $file.FullName > $savePath; #this runs lessc filename.less > filename.min.css  
     Write-Host($savePath);
 }
 
 
-
-
-
-##################
+####################################
 #process js
-##################
-Write-Host(@'
-------------------
-process js
-------------------
-'@)
-$jsFiles = Get-ChildItem -recurse -include *.js -exclude *.min.js | 
-    Where-Object { $arrTargetJavascriptFiles.Count -eq 0 -or $arrTargetJavascriptFiles -contains $_.BaseName }
+####################################
+Write-Host("`n");
+Write-Host('processing js')
+
+$jsFiles = Get-ChildItem $assetsDir.FullName -recurse -include *.js -exclude *.min.js | 
+    Where-Object { $arrTargetJavascriptFiles -contains $_.BaseName }
+
+if($jsFiles.Count -eq 0)
+{
+    Write-Host('please specify .js files to minify.');
+}
+
 foreach ($file in $jsFiles)
 {           
     $str = Get-Content -Path $file.FullName;
@@ -81,64 +105,95 @@ foreach ($file in $jsFiles)
 
 
 
-##################
+####################################
 #resize images
-##################
-Write-Host(@'
-------------------
-resize images
-------------------
-'@)
-$imgFiles = Get-ChildItem -recurse -include *.png, *jpeg, *jpg | 
-    Where-Object { $_.BaseName -notlike "*-resize*" }
+####################################
+Write-Host("`n");
+Write-Host('resizing images')
 
+$resizedDirName = 'resized';
+
+$imgFiles = Get-ChildItem $siteAssetsDir.FullName -recurse -include *.png, *jpeg, *jpg | 
+    Where-Object { $_.DirectoryName -notmatch ($resizedDirName + '$') }
+
+if($imgFiles.Count -eq 0)
+{
+    Write-Host('please specify image files to resize.');
+}
+
+#set target widths
+$largeWidth = 1200;
+$desktopWidth = 980;
+$portraitTabletWidth = 768;
+$phoneToTabletWidth = 480;
+$phoneWidth = 320;
+
+#set target suffixes for save
+$largeSuffix = '-resizeLarge';
+$desktopSuffix = '-resizeDesktop';
+$portraitTabletSuffix = '-resizePortraitTablet';
+$phoneToTabletSuffix = '-resizePhoneToTablet';
+$phoneSuffix = '-resizePhone';
+    
 foreach ($file in $imgFiles)
-{    
-    $img = $file | Get-image
+{                
+    $image = $file | Get-image;    
+    
+    $aspectRatio = $image.Height / $image.Width;
 
-    #TODO save the original file in a folder called 'originals'
+    #create the resized directory for this folder, if it doesn't exist
+    $saveDirectory = $file.DirectoryName + '\' + $resizedDirName;    
+    if(!(Test-Path $saveDirectory))
+    {
+        New-Item -ItemType directory -Path $saveDirectory
+    }   
 
-    $fullName = $img.FullName;
-    $suffixIndex = $fullName.LastIndexOf('.');
-    $aspectRatio = $img.Height / $img.Width;
-    $newHeight = 0;
-
-    $largeWidth = 1200;
-    $desktopWidth = 980;
-    $portraitTabletWidth = 768;
-    $phoneToTabletWidth = 480;
-    $phoneWidth = 320;
+    #determine where to stuff the suffix
+    $suffixStuffIndex = $file.Name.LastIndexOf('.');
 
     Function ResizeAndRenameImage($newWidth, $newSuffix)
     {
         $newHeight = $aspectRatio * $newWidth;           
-        $savePath = $fullName.Insert($suffixIndex,$newSuffix);
-        $img.Resize($newWidth, $newHeight);
-        #TODO over-write the file if it exists
-        $img.SaveFile($savePath); 
+              
+        #set the savePath
+        $savePath = $saveDirectory + '\' + $file.Name.Insert($suffixStuffIndex, $newSuffix);                                                
+        if(Test-Path $savePath)
+        {
+            #file exists so delete it before save.
+            Remove-Item $savePath;
+        }
+        
+        $image = $image | Set-ImageFilter -filter (Add-ScaleFilter -Width $newWidth -Height $newHeight -passThru) -passThru                    
+        $image.SaveFile($savePath);
+        Write-Host($savePath);
     }
 
-    ResizeAndRenameImage $largeWidth '-resizeLarge'
-    ResizeAndRenameImage $desktopWidth '-resizeDesktop'
-    ResizeAndRenameImage $portraitTabletWidth '-resizePortraitTablet'
-    ResizeAndRenameImage $phoneToTabletWidth '-resizePhoneToTablet'
-    ResizeAndRenameImage $phoneWidth '-resizePhone'
-    
+    ResizeAndRenameImage $largeWidth $largeSuffix
+    ResizeAndRenameImage $desktopWidth $desktopSuffix
+    ResizeAndRenameImage $portraitTabletWidth $portraitTabletSuffix
+    ResizeAndRenameImage $phoneToTabletWidth $phoneToTabletSuffix
+    ResizeAndRenameImage $phoneWidth $phoneSuffix
 }
 
 
-##################
+
+
+
+
+
+####################################
 #optimize images
-##################
-Write-Host(@'
-------------------
-optimize images
-------------------
-'@)
-if($doOptimizeImages) {
-    & $fileOpt.FullName $assetsFolder.FullName
-} else {
-    Write-Host('User opted out of image optimization');
+####################################
+Write-Host("`n");
+Write-Host('optimizing images');
+
+if($doOptimizeImages) 
+{                      
+    & $fileOpt.FullName $siteAssetsDir.FullName;
+} 
+else 
+{
+    Write-Host('please opt in to image optimization');
 }
 
 
@@ -146,13 +201,12 @@ if($doOptimizeImages) {
 
 
 
-##################
+
+
+####################################
 #prevent exiting
-##################
-Write-Host(@'
-------------------
-Press any key to exit.
-------------------
-'@)
+####################################
+Write-Host("`n");
+Write-Host('Press any key to exit.')
 Read-Host
 Exit

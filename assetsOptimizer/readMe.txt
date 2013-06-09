@@ -1,11 +1,11 @@
-1 Copy the entire <AssetOptimizer-Process> directory.
-2 Paste it as a sibling (not a child) of the assets-N directory.
-2 Run process.ps1 in PowerShell.
+1 Copy the entire <assetOptimizer-Process> directory.
+2 Paste it as a sibling (not a child) of your sites assets-N directory.
+3 Run assetOptimizer-Process\process.ps1 in PowerShell.
 
 Results
-LESS files are compiled, renamed to .css, and placed into a sibling css directory.
-JAVASCRIPT files are minified, renamed to .min.js, and placed into the same directory.
-IMAGES are stripped of metadata and compressed.
+Compiles and minifies LESS. Saves the results as .min.css in a css sibling directory.
+Minifies JAVASCRIPT. Saves the results as .min.js in the same directory.
+Strips, compresses, and resizes IMAGES for responsive layouts. Save results in same directory.
 
 Known Issues
 -Sometimes pngout.exe crashes. Close pngout.exe if alerted to do so.
